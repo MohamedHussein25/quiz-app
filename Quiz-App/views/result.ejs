@@ -5,7 +5,7 @@
   <title>Result</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body class="quiz-result <%= darkMode ? 'dark-mode' : '' %>">
+<body class="quiz-result">
   <div class="container">
     <div class="title-bar">
       <h1 class="blue-text">🎉 Well done, <%= result.username %>!</h1>
@@ -29,7 +29,12 @@
       <a href="/" class="nextBtn">📄 Exit</a>
     </div>
   </div>
+
   <script src="/script.js" defer></script>
-  <script src="/darkMode.js" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      setupDarkMode();
+    });
+  </script>
 </body>
 </html>
