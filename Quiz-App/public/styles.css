@@ -523,3 +523,14 @@ body.dark-mode {
 .dark-mode #darkToggle:hover {
   background-color: #333;
 }
+
+/* 🌙 Dark Mode for Result Buttons */
+body.dark-mode .result-buttons a {
+  background-color: #222 !important;
+  color: white !important;
+  border: 1px solid #555;
+}
+
+body.dark-mode .result-buttons a:hover {
+  background-color: #333 !important;
+}
