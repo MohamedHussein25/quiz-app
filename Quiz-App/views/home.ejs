@@ -89,6 +89,25 @@
       const showMain = () => {
         anim?.remove();
         content.classList.add("show");
+
+        setTimeout(() => {
+          const darkToggle = document.getElementById("darkToggle");
+
+          const isDark = localStorage.getItem("darkMode") === "true";
+          if (isDark) {
+            document.body.classList.add("dark-mode");
+            if (darkToggle) darkToggle.textContent = "☀️ Light Mode";
+          }
+
+          if (darkToggle) {
+            darkToggle.addEventListener("click", () => {
+              document.body.classList.toggle("dark-mode");
+              const nowDark = document.body.classList.contains("dark-mode");
+              localStorage.setItem("darkMode", nowDark ? "true" : "false");
+              darkToggle.textContent = nowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+            });
+          }
+        }, 50);
       };
 
       if (!sessionStorage.getItem("entryShown")) {
@@ -104,7 +123,5 @@
     });
   </script>
 
-  <script src="/darkMode.js" defer></script>
-  <script src="/script.js" defer></script>
 </body>
 </html>
