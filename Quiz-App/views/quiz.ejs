@@ -11,7 +11,6 @@
       <h2>Hello, <%= username %>! Let’s begin:</h2>
       <button id="darkToggle">🌙 Dark Mode</button>
       <button id="muteToggle">🔈 Unmute</button>
-      
     </div>
 
     <form id="quizForm" method="POST" action="/submit">
@@ -40,24 +39,10 @@
   </div>
 
   <script src="/script.js" defer></script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const darkToggle = document.getElementById("darkToggle");
-    if (localStorage.getItem("darkMode") === "true") {
-      document.body.classList.add("dark-mode");
-    }
-    darkToggle?.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-      if (document.body.classList.contains("dark-mode")) {
-        localStorage.setItem("darkMode", "true");
-      } else {
-        localStorage.removeItem("darkMode");
-      }
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      setupDarkMode();
     });
-  });
-</script>
-
-  <script src="/darkMode.js" defer></script>
+  </script>
 </body>
 </html>
