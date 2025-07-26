@@ -1,8 +1,36 @@
+function setupDarkMode(buttonId = "darkToggle") {
+  const applyDarkMode = () => {
+    const toggle = document.getElementById(buttonId);
+    const isDark = localStorage.getItem("darkMode") === "true";
+
+    if (isDark) {
+      document.body.classList.add("dark-mode");
+      if (toggle) toggle.textContent = "☀️ Light Mode";
+    } else {
+      document.body.classList.remove("dark-mode");
+      if (toggle) toggle.textContent = "🌙 Dark Mode";
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        const nowDark = document.body.classList.toggle("dark-mode");
+        localStorage.setItem("darkMode", nowDark ? "true" : "false");
+        toggle.textContent = nowDark ? "☀️ Light Mode" : "🌙 Dark Mode";
+      });
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", applyDarkMode);
+  } else {
+    applyDarkMode();
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const slides = document.querySelectorAll(".question-slide");
   const nextButtons = document.querySelectorAll(".nextBtn");
   const progressBar = document.getElementById("progress");
-  const darkToggle = document.getElementById("darkToggle");
   const muteToggle = document.getElementById("muteToggle");
   const form = document.getElementById("quizForm");
   const timerDisplay = document.getElementById("time");
@@ -39,22 +67,16 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (darkToggle) {
-    darkToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-    });
-  }
-
-
   function startTimer() {
     timeLeft = 15;
-    timerDisplay.textContent = timeLeft;
+    timerDisplay && (timerDisplay.textContent = timeLeft);
     timer = setInterval(() => {
       timeLeft--;
-      timerDisplay.textContent = timeLeft;
+      timerDisplay && (timerDisplay.textContent = timeLeft);
       if (timeLeft === 0) {
         clearInterval(timer);
-        document.querySelector(".nextBtn").click();
+        const btn = document.querySelector(".nextBtn");
+        if (btn) btn.click();
       }
     }, 1000);
   }
@@ -71,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   showSlide(current);
-  startTimer();
+  if (slides.length > 0) startTimer();
 
   nextButtons.forEach(btn => {
     btn.addEventListener("click", () => {
@@ -103,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showSlide(current);
           resetTimer();
         } else {
-          form.submit();
+          form && form.submit();
         }
       }, 1000);
     });
