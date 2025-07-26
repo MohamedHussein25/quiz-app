@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Quiz for <%= username %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="title-bar">
+      <h2>Hello, <%= username %>! Let’s begin:</h2>
+      <button id="darkToggle">🌙 Dark Mode</button>
+      <button id="muteToggle">🔈 Unmute</button>
+      
+    </div>
+
+    <form id="quizForm" method="POST" action="/submit">
+      <div id="progress-container">
+        <div id="progress"></div>
+      </div>
+
+      <div id="timer">⏱ Time left: <span id="time">15</span>s</div>
+
+      <% questions.forEach((q, i) => { %>
+        <div class="question-block question-slide bg-<%= i % 5 %>" id="q<%= i %>" data-correct="<%= q.answer %>">
+          <h3>Q<%= i + 1 %>: <%= q.question %></h3>
+
+          <% const letters = ["A", "B", "C", "D"]; %>
+          <% q.options.forEach((opt, idx) => { %>
+            <label>
+              <input type="radio" name="q<%= i %>" value="<%= letters[idx] %>">
+              <%= letters[idx] %>: <%= opt.text %>
+            </label><br>
+          <% }) %>
+
+          <div style="text-align: center;"><button type="button" class="nextBtn">Next ➡️</button></div>
+        </div>
+      <% }) %>
+    </form>
+  </div>
+
+  <script src="/script.js" defer></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const darkToggle = document.getElementById("darkToggle");
+    if (localStorage.getItem("darkMode") === "true") {
+      document.body.classList.add("dark-mode");
+    }
+    darkToggle?.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      if (document.body.classList.contains("dark-mode")) {
+        localStorage.setItem("darkMode", "true");
+      } else {
+        localStorage.removeItem("darkMode");
+      }
+    });
+  });
+</script>
+
+  <script src="/darkMode.js" defer></script>
+</body>
+</html>
