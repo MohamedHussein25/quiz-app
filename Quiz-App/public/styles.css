@@ -514,4 +514,12 @@ body.dark-mode {
   display: inline-block;
 }
 
+.dark-mode #darkToggle {
+  background-color: #222;
+  color: #f1f1f1;
+  border: 1px solid #555;
+}
 
+.dark-mode #darkToggle:hover {
+  background-color: #333;
+}
