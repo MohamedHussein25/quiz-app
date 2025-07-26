@@ -1,26 +1,9 @@
-
 document.addEventListener("DOMContentLoaded", () => {
   const slides = document.querySelectorAll(".question-slide");
   const nextButtons = document.querySelectorAll(".nextBtn");
   const progressBar = document.getElementById("progress");
   const darkToggle = document.getElementById("darkToggle");
   const muteToggle = document.getElementById("muteToggle");
-  let isMuted = false;
-  muteToggle.addEventListener("click", () => {
-    isMuted = !isMuted;
-    muteToggle.textContent = isMuted ? "🔈 Unmute" : "🔇 Mute";
-    correctSound.muted = isMuted;
-    wrongSound.muted = isMuted;
-    backgroundMusic.muted = isMuted;
-    audio.muted = isMuted;
-  });
-darkToggle.addEventListener("click", () => {
-    document.body.classList.toggle("dark-mode");
-  });
-  const musicToggle = document.getElementById("musicToggle");
-  const retakeBtn = document.getElementById("retakeBtn");
-  const resultBlock = document.getElementById("result-block");
-  const finalScore = document.getElementById("finalScore");
   const form = document.getElementById("quizForm");
   const timerDisplay = document.getElementById("time");
 
@@ -28,19 +11,40 @@ darkToggle.addEventListener("click", () => {
   let timer, timeLeft = 15;
 
   const audio = new Audio('/sounds/click.mp3');
-  audio.volume = 1.0;
-  audio.muted = false;
   const correctSound = new Audio('/sounds/correct.mp3');
-  correctSound.volume = 1.0;
-  correctSound.muted = false;
   const wrongSound = new Audio('/sounds/incorrect.mp3');
-  wrongSound.volume = 1.0;
-  wrongSound.muted = false;
-  let musicPlaying = false;
   const backgroundMusic = new Audio('/sounds/bg-music.mp3');
-  backgroundMusic.volume = 0.4;
-  backgroundMusic.muted = false;
   backgroundMusic.loop = true;
+
+  const audioElements = [audio, correctSound, wrongSound, backgroundMusic];
+
+  if (localStorage.getItem("isMuted") === null) {
+    localStorage.setItem("isMuted", "false");
+  }
+
+  let isMuted = localStorage.getItem("isMuted") === "true";
+  audioElements.forEach(el => {
+    el.volume = el === backgroundMusic ? 0.4 : 1.0;
+    el.muted = isMuted;
+  });
+
+  if (muteToggle) {
+    muteToggle.textContent = isMuted ? "🔇 Mute" : "🔈 Unmute";
+
+    muteToggle.addEventListener("click", () => {
+      isMuted = !isMuted;
+      audioElements.forEach(el => el.muted = isMuted);
+      muteToggle.textContent = isMuted ? "🔇 Mute" : "🔈 Unmute";
+      localStorage.setItem("isMuted", isMuted);
+    });
+  }
+
+  if (darkToggle) {
+    darkToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+  }
+
 
   function startTimer() {
     timeLeft = 15;
@@ -104,16 +108,11 @@ darkToggle.addEventListener("click", () => {
       }, 1000);
     });
   });
-});
 
-
-document.addEventListener("DOMContentLoaded", () => {
-  const quizForm = document.getElementById("quizForm");
   const nextBtn = document.getElementById("nextBtn");
-
-  if (quizForm && nextBtn) {
+  if (form && nextBtn) {
     nextBtn.addEventListener("click", (e) => {
-      const selected = quizForm.querySelector("input[type='radio']:checked");
+      const selected = form.querySelector("input[type='radio']:checked");
       if (!selected) {
         e.preventDefault();
         alert("⚠️ Please select your answer!");
